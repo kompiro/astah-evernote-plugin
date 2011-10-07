@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+   <extension point="com.change_vision.astah.ui.actionSets">
+      <actionSet
+            label="%action_set_label"
+            visible="true"
+            id="com.change_vision.astah.evernote-integration.actionSet">
+         <menu
+               id="evernote-integration"
+               label="%menu_group"
+               path="tool/export_image">
+         </menu>
+         <action
+			   label="%menu_label"
+               icon="icons/sample.gif"
+               class="com.change_vision.astah.evernote.CreateNoteAction"
+               tooltip="%menu_tooltip"
+               menubarPath="tool/evernote-integration/"
+               id="evernote-integration">
+         </action>
+     </actionSet>
+   </extension>
+</plugin>
