@@ -192,17 +192,19 @@ public class Evernote {
   
   /**
    * Create a new note containing a little text and the Evernote app icon.
+ * @param resource 
    */
-  public void createNote(String title,String content)
+  public void createNote(String title, Resource resource)
     throws Exception
   {
     Note note = new Note();
     note.setTitle(title);
-
-    content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+    note.addToResources(resource);
+    String hashHex = bytesToHex(resource.getData().getBodyHash());
+    String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
         + "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">"
         + "<en-note>" 
-        + "<span>" + content + "</span><br/>"
+        + "<en-media type=\"image/png\" hash=\"" + hashHex + "\"/><br/>"
         + "</en-note>";
     note.setContent(content);
     
@@ -330,7 +332,7 @@ public class Evernote {
   /**
    * Helper method to convert a byte array to a hexadecimal string.
    */
-  public static String bytesToHex(byte[] bytes) {
+  private String bytesToHex(byte[] bytes) {
     StringBuilder sb = new StringBuilder();
     for (byte hashByte : bytes) {
       int intVal = 0xff & hashByte;
