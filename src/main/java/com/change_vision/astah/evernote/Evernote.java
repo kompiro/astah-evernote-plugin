@@ -16,18 +16,26 @@ package com.change_vision.astah.evernote;
   http://www.evernote.com/about/developer/api/ref/
  */
 
-import java.util.*;
-import java.io.*;
-import java.security.MessageDigest;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.transport.THttpClient;
 
-import com.evernote.edam.type.*;
-import com.evernote.edam.userstore.*;
-import com.evernote.edam.error.*;
+import com.evernote.edam.error.EDAMErrorCode;
+import com.evernote.edam.error.EDAMUserException;
+import com.evernote.edam.notestore.NoteFilter;
+import com.evernote.edam.notestore.NoteList;
+import com.evernote.edam.notestore.NoteStore;
+import com.evernote.edam.type.Note;
+import com.evernote.edam.type.NoteSortOrder;
+import com.evernote.edam.type.Notebook;
+import com.evernote.edam.type.Resource;
+import com.evernote.edam.type.Tag;
+import com.evernote.edam.type.User;
+import com.evernote.edam.userstore.AuthenticationResult;
 import com.evernote.edam.userstore.Constants;
-import com.evernote.edam.notestore.*;
+import com.evernote.edam.userstore.UserStore;
 
 public class Evernote {
   
@@ -302,31 +310,6 @@ public class Evernote {
     }
     
     System.out.println();
-  }
-
-  /**
-   * Helper method to read the contents of a file on disk and create a new Data object.
-   */
-  private static Data readFileAsData(String fileName) throws Exception {
-
-    // Read the full binary contents of the file
-    FileInputStream in = new FileInputStream(fileName);
-    ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-    byte[] block = new byte[10240];
-    int len;
-    while ((len = in.read(block)) >= 0) {
-      byteOut.write(block, 0, len);
-    }
-    in.close();
-    byte[] body = byteOut.toByteArray();
-    
-    // Create a new Data object to contain the file contents
-    Data data = new Data();
-    data.setSize(body.length);
-    data.setBodyHash(MessageDigest.getInstance("MD5").digest(body));
-    data.setBody(body);
-    
-    return data;
   }
 
   /**
