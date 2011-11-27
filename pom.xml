@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.change_vision.astah</groupId>
   <artifactId>evernote-integration</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <packaging>bundle</packaging>
   <name>%bundle.name</name>
   <description>%bundle.description</description>
@@ -154,6 +154,23 @@
         <configuration>
           <encoding>UTF-8</encoding>
         </configuration>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/</outputDirectory>
+              <resources>          
+                <resource>
+                  <directory>${oauth_properties}</directory>
+                </resource>
+              </resources>              
+            </configuration>            
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>com.change_vision.astah</groupId>
@@ -203,6 +220,7 @@
               | each module can override these defaults in their osgi.bnd file
             -->
             <_include>-osgi.bnd</_include>
+            <Include-Resource>{maven-resources}, {maven-dependencies},${basedir}/target/evernote_oauth.properties</Include-Resource>
             <Embed-Dependency>!astah-*;scope=compile|runtime|system;type=!pom</Embed-Dependency>
           </instructions>
         </configuration>
