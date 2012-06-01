@@ -9,7 +9,7 @@
   <groupId>com.change_vision.astah</groupId>
   <artifactId>evernote-integration</artifactId>
   <version>1.0</version>
-  <packaging>bundle</packaging>
+  <packaging>jar</packaging>
   <name>%bundle.name</name>
   <description>%bundle.description</description>
   <pluginRepositories>
@@ -26,22 +26,22 @@
       </releases>
     </pluginRepository>
   </pluginRepositories>
- <repositories>
-  <repository>
-   <id>java.net</id>
-   <name>java.net Maven Repository</name>
-   <url>http://download.java.net/maven/2</url>
-   <releases>
-   </releases>
-   <snapshots>
-    <enabled>false</enabled>
-   </snapshots>
-  </repository>
-  <repository>
-   <id>uk-central</id>
-   <url>http://uk.maven.org/maven2/</url>
-  </repository>
- </repositories>
+  <repositories>
+    <repository>
+      <id>java.net</id>
+      <name>java.net Maven Repository</name>
+      <url>http://download.java.net/maven/2</url>
+      <releases>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>uk-central</id>
+      <url>http://uk.maven.org/maven2/</url>
+    </repository>
+  </repositories>
   <reporting>
     <plugins>
       <plugin>
@@ -87,9 +87,9 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.4.2</version>
         <configuration>
-           <systemPropertyVariables>
-                  <file.encoding>utf-8</file.encoding>
-                </systemPropertyVariables>
+          <systemPropertyVariables>
+            <file.encoding>utf-8</file.encoding>
+          </systemPropertyVariables>
           <excludes>
             <exclude>**/TestUtils.java</exclude>
             <exclude>learning/**/*.java</exclude>
@@ -163,12 +163,12 @@
             </goals>
             <configuration>
               <outputDirectory>${basedir}/target/</outputDirectory>
-              <resources>          
+              <resources>
                 <resource>
                   <directory>${oauth_properties}</directory>
                 </resource>
-              </resources>              
-            </configuration>            
+              </resources>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -178,20 +178,9 @@
         <version>0.8</version>
       </plugin>
       <plugin>
-        <groupId>org.ops4j</groupId>
-        <artifactId>maven-pax-plugin</artifactId>
-        <version>1.5</version>
-        <!--
-          | enable improved OSGi compilation support for the bundle
-          life-cycle. | to switch back to the standard bundle life-cycle,
-          move this setting | down to the maven-bundle-plugin section
-        -->
-        <extensions>true</extensions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>1.4.3</version>
+        <version>2.3.7</version>
         <executions>
           <execution>
             <id>build-bundle</id>
@@ -202,128 +191,116 @@
           </execution>
         </executions>
         <!--
-          | the following instructions build a simple set of public/private
-          classes into an OSGi bundle
+        | the following instructions build a simple set of public/private
+        classes into an OSGi bundle
         -->
         <configuration>
           <instructions>
             <Bundle-SymbolicName>${bundle.symbolicName}; singleton:=true</Bundle-SymbolicName>
-            <Bundle-Version>${pom.version}</Bundle-Version>
+            <Bundle-Version>${project.version}</Bundle-Version>
             <!--
-              | assume public classes are in the top package, and private
-              classes are under ".internal"
-            -->
-            <Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${pom.version}"</Export-Package>
+            | assume public classes are in the top package, and private
+            classes are under ".internal"
+            <Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${project.version}"</Export-Package>
             <Private-Package>${bundle.namespace}.internal.*</Private-Package>
+            -->
             <Bundle-Activator>${bundle.namespace}.internal.Activator</Bundle-Activator>
             <!--
-              | each module can override these defaults in their osgi.bnd file
+            | each module can override these defaults in their osgi.bnd file
             -->
             <_include>-osgi.bnd</_include>
-            <Include-Resource>{maven-resources}, {maven-dependencies},${basedir}/target/evernote_oauth.properties</Include-Resource>
-            <Embed-Dependency>!astah-*;scope=compile|runtime|system;type=!pom</Embed-Dependency>
-          </instructions>
+          <Include-Resource>{maven-resources}, {maven-dependencies},${basedir}/target/evernote_oauth.properties</Include-Resource>
+          <Embed-Dependency>!astah-*;scope=compile|runtime|system;type=!pom</Embed-Dependency>
+          <Embed-Transitive>true</Embed-Transitive>
+        </instructions>
+      </configuration>
+    </plugin>
+  </plugins>
+  <pluginManagement>
+    <plugins>
+      <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+      <plugin>
+        <groupId>org.eclipse.m2e</groupId>
+        <artifactId>lifecycle-mapping</artifactId>
+        <version>1.0.0</version>
+        <configuration>
+          <lifecycleMappingMetadata>
+            <pluginExecutions>
+              <pluginExecution>
+                <pluginExecutionFilter>
+                  <groupId>
+                    org.apache.felix
+                  </groupId>
+                  <artifactId>
+                    maven-bundle-plugin
+                  </artifactId>
+                  <versionRange>
+                    [2.3.7,)
+                  </versionRange>
+                  <goals>
+                    <goal>bundle</goal>
+                  </goals>
+                </pluginExecutionFilter>
+                <action>
+                  <ignore></ignore>
+                </action>
+              </pluginExecution>
+            </pluginExecutions>
+          </lifecycleMappingMetadata>
         </configuration>
       </plugin>
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>
-                      org.apache.felix
-                    </groupId>
-                    <artifactId>
-                      maven-bundle-plugin
-                    </artifactId>
-                    <versionRange>
-                      [1.4.3,)
-                    </versionRange>
-                    <goals>
-                      <goal>bundle</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore></ignore>
-                  </action>
-                </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.ops4j</groupId>
-                    <artifactId>
-                      maven-pax-plugin
-                    </artifactId>
-                    <versionRange>
-                      [1.5,)
-                    </versionRange>
-                    <goals>
-                      <goal>testCompile</goal>
-                      <goal>compile</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore></ignore>
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
-  <dependencies>
-    <dependency>
-      <groupId>com.change_vision.astah</groupId>
-      <artifactId>astah-api</artifactId>
-      <version>6.5</version>
-      <scope>system</scope>
-      <systemPath>/${astahPath}/astah-api.jar</systemPath>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.core</artifactId>
-      <version>4.2.0</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <version>4.2.0</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.10</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.thrift</groupId>
-      <artifactId>libthrift</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/libthrift.jar</systemPath>
-    </dependency>
-    <dependency>
-      <groupId>com.evernote</groupId>
-      <artifactId>evernote-api</artifactId>
-      <version>1.19</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/evernote-api.jar</systemPath>
-    </dependency>
-	<dependency>
-	    <groupId>org.apache.commons</groupId>
-	    <artifactId>commons-lang3</artifactId>
-	    <version>3.0.1</version>
-	</dependency>
-  </dependencies>
+  </pluginManagement>
+</build>
+<dependencies>
+  <dependency>
+    <groupId>com.change_vision.astah</groupId>
+    <artifactId>astah-api</artifactId>
+    <version>6.5</version>
+    <scope>system</scope>
+    <systemPath>/${astahPath}/astah-api.jar</systemPath>
+  </dependency>
+  <dependency>
+    <groupId>org.osgi</groupId>
+    <artifactId>org.osgi.core</artifactId>
+    <version>4.2.0</version>
+    <scope>provided</scope>
+  </dependency>
+  <dependency>
+    <groupId>org.osgi</groupId>
+    <artifactId>org.osgi.compendium</artifactId>
+    <version>4.2.0</version>
+    <scope>provided</scope>
+  </dependency>
+  <dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.10</version>
+    <scope>test</scope>
+  </dependency>
+  <dependency>
+    <groupId>org.apache.thrift</groupId>
+    <artifactId>libthrift</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <scope>system</scope>
+    <systemPath>${basedir}/lib/libthrift.jar</systemPath>
+  </dependency>
+  <dependency>
+    <groupId>com.evernote</groupId>
+    <artifactId>evernote-api</artifactId>
+    <version>1.19</version>
+    <scope>system</scope>
+    <systemPath>${basedir}/lib/evernote-api.jar</systemPath>
+  </dependency>
+  <dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-lang3</artifactId>
+    <version>3.0.1</version>
+  </dependency>
+  <dependency>
+    <groupId>org.swinglabs</groupId>
+    <artifactId>swingx</artifactId>
+    <version>1.6.1</version>
+  </dependency>
+</dependencies>
 </project>
