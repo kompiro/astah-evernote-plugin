@@ -1,0 +1,3 @@
+[submodule "evernote-sdk-java"]
+	path = evernote-sdk-java
+	url = git://github.com/evernote/evernote-sdk-java.git
